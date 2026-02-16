@@ -1,66 +1,42 @@
-## Foundry
+# Reentrancy Lab (Foundry)
+This is a minimal lab foucsing on demonstrating Reentrancy Attack, CEI fix and ReentrancyGuard protection
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+This project demonstrates:
+- a volunerable vault contract
+- a vault contract protected by CEI fix.
+- a vault contract protected by CEI fix and ReentrancyGuard.
+## Project Structure
+```src/
+  ├── VulnerableVault.sol
+  ├── CEIVault.sol
+  ├── SafeVault.sol
+  ├── ReentrancyAttacker.sol
 
-Foundry consists of:
-
-- **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
-- **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
-- **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
-- **Chisel**: Fast, utilitarian, and verbose solidity REPL.
-
-## Documentation
-
-https://book.getfoundry.sh/
-
-## Usage
-
-### Build
-
-```shell
-$ forge build
+test/
+  ├── Reentrancy.t.sol
 ```
+## Setup
 
-### Test
+Install dependencies:
 
-```shell
-$ forge test
+```bash
+forge install
+forge test -vvv
 ```
+## Reentrancy Attack Flow
+- attacker deposites 1 ETH
+- attacker try to withdraw 1 ETH
+- attacker withdraws again when withdraw successful
+- keep doing this until there is no sufficient balance
+## Protection Mechanism
+### CEI
+We deduct balance before the withdraw was successful
+### ReentrancyGuard
+We ues the state to check whether the withdraw process really end.
+## Tech Stack
 
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+- Solidity ^0.8.20
+- Foundry
+## Lessons Learned
+- Always update state before external call
+- Use Reenetrancy guard as security
