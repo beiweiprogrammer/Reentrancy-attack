@@ -6,7 +6,8 @@ This project demonstrates:
 - a vault contract protected by CEI fix.
 - a vault contract protected by CEI fix and ReentrancyGuard.
 ## Project Structure
-```src/
+```
+src/
   ├── VulnerableVault.sol
   ├── CEIVault.sol
   ├── SafeVault.sol
